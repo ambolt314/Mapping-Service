@@ -8,6 +8,7 @@ class Person:
     identifier: int # unique identifier
     name: str
     workplace_start_date: date
+    workplace_end_date: date | None
     membership: Membership | None
     assessment: Assessment
     # the people to whom the Person is connected. Score given to show amicability
@@ -28,13 +29,19 @@ class Person:
         self.notes = []
 
     def get_start_date_difference(self):
-        if self.is_in_union():
+        if self.is_in_union() and self.membership:
             return self.workplace_start_date - self.membership.start_date
         else:
             return 0
 
+    def is_current_employee(self):
+        return self.workplace_end_date is None
+
     def is_in_union(self):
-        return self.membership is not None
+        try:
+            return self.membership is not None
+        except AttributeError:
+            return False
 
     def add_note(self, note: str) -> str:
         self.notes.append(note)
