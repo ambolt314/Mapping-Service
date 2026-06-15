@@ -1,26 +1,14 @@
 import enum
 from datetime import date
 
-
-class MembershipStatus(enum.Enum):
-    # different types of membership in Prospect
-    NON_MEMBER = "non-member"
-    REPRESENTATIVE = "representative"
-    STANDARD_MEMBER = "standard-member"
-    FULL_TIME = "full-time"
-
-    # find a way to add membership start date
-
-class Assessment(enum.Enum):
-    PRO = "pro"
-    NEUTRAL = "neutral"
-    ANTI_UNION = "anti-union"
+from people.assessment import Assessment
+from people.membership import Membership
 
 class Person:
     identifier: int # unique identifier
     name: str
-    start_date: date
-    membership_status: MembershipStatus
+    workplace_start_date: date
+    membership: Membership | None
     assessment: Assessment
     # the people to whom the Person is connected. Score given to show amicability
     # -5 = strong opponent
@@ -31,16 +19,22 @@ class Person:
     last_contacted = date
 
 
-    def __init__(self, identifier: int, name: str, start_date: date, assessment: Assessment):
+    def __init__(self, identifier: int, name: str, workplace_start_date: date, assessment: Assessment):
         self.identifier = identifier
         self.name = name
-        self.start_date = start_date
+        self.workplace_start_date = workplace_start_date
         self.assessment = assessment
         self.colleagues = {}
         self.notes = []
 
+    def get_start_date_difference(self):
+        if self.is_in_union():
+            return self.workplace_start_date - self.membership.start_date
+        else:
+            return 0
+
     def is_in_union(self):
-        return self.membership_status is not MembershipStatus.NON_MEMBER
+        return self.membership is not None
 
     def add_note(self, note: str) -> str:
         self.notes.append(note)
