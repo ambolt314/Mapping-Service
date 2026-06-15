@@ -7,6 +7,7 @@ from people.membership import Membership
 class Person:
     identifier: int # unique identifier
     name: str
+    email_address = str
     workplace_start_date: date
     workplace_end_date: date | None
     membership: Membership | None
