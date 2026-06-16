@@ -1,4 +1,3 @@
-import enum
 from datetime import date
 
 from people.assessment import Assessment

@@ -11,6 +11,7 @@ class MembershipType(enum.Enum):
 class Membership:
     membership_id: int # unique identifier for Prospect members
     membership_type: MembershipType
+    branch: str
     start_date: date
     previous_membership: Membership | None
     membership_comments: list[str] = []
