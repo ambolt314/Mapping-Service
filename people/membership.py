@@ -1,25 +1,28 @@
 import enum
 from datetime import date
 
-
-class MembershipType(enum.Enum):
-    # different types of membership in Prospect
-    REPRESENTATIVE = "representative"
-    STANDARD_MEMBER = "standard-member"
-    FULL_TIME = "full-time"
+from people.union_sentiment import UnionSentiment
+from people.representative import Representative
+from people.union_strength import UnionStrength
 
 class Membership:
     membership_id: int # unique identifier for Prospect members
-    membership_type: MembershipType
-    branch: str
-    start_date: date
-    previous_membership: Membership | None
+    branch: str = "UK Research and Innovation"
+    membership_start_date: date
     membership_comments: list[str] = []
+    email_address = str
+    union_sentiment: UnionSentiment | None
+    union_strength: UnionStrength | None
+    representative: Representative | None
 
-    def __init__(self, membership_type: MembershipType, start_date: date = date.today(), previous_membership: Membership | None = None):
-        self.membership_type = membership_type
-        self.start_date = start_date
-        self.previous_membership = previous_membership
+    def __init__(self, membership_id: int, email_address: str, branch: str = "UK Research and Innovation", membership_start_date: date = date.today()):
+        self.membership_id = membership_id
+        self.branch = branch
+        self.membership_start_date = membership_start_date
+        self.email_address = email_address
 
     def add_membership_comment(self, comment: str):
         self.membership_comments.append(comment)
+
+    def is_representative(self):
+        return self.representative is not None
